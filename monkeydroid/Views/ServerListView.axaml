@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:monkeydroid.ViewModels"
+             xmlns:m="using:monkeydroid.Models"
+             x:Class="monkeydroid.Views.ServerListView"
+             x:DataType="vm:ServerListViewModel">
+
+  <DockPanel>
+
+    <!-- Add button at bottom -->
+    <Button DockPanel.Dock="Bottom" Content="Add Server" Name="AddButton"
+            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+            Margin="16,8,16,16" Padding="12" Classes="accent" />
+
+    <!-- Server list -->
+    <ScrollViewer>
+      <ItemsControl ItemsSource="{Binding Servers}" Margin="16,8">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate DataType="m:Server">
+            <Button Margin="0,4" Padding="12,8" CornerRadius="4"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    Background="{DynamicResource SystemControlBackgroundListLowBrush}">
+              <StackPanel>
+                <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="SemiBold" />
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <TextBlock Text="{Binding Port, StringFormat='Port: {0}'}"
+                             FontSize="12" Foreground="Gray" />
+                  <TextBlock Text="{Binding AlternatePort, StringFormat='Alt: {0}'}"
+                             FontSize="12" Foreground="Gray"
+                             IsVisible="{Binding AlternatePort, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                </StackPanel>
+              </StackPanel>
+            </Button>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+  </DockPanel>
+</UserControl>

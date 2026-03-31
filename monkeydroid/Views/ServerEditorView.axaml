@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:monkeydroid.ViewModels"
+             x:Class="monkeydroid.Views.ServerEditorView"
+             x:DataType="vm:ServerEditorViewModel">
+
+  <DockPanel Margin="16">
+
+    <!-- Buttons at bottom -->
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
+                HorizontalAlignment="Center" Spacing="16" Margin="0,24,0,0">
+      <Button Content="Save" Command="{Binding SaveCommand}"
+              IsEnabled="{Binding CanSave}" MinWidth="100"
+              HorizontalContentAlignment="Center" Classes="accent" />
+      <Button Content="Cancel" Command="{Binding CancelCommand}"
+              IsVisible="{Binding CanCancel}" MinWidth="100"
+              HorizontalContentAlignment="Center" />
+    </StackPanel>
+
+    <!-- Input fields -->
+    <StackPanel VerticalAlignment="Center" Spacing="12" MaxWidth="320">
+
+      <TextBlock Text="Server name:" FontWeight="SemiBold" />
+      <TextBox Text="{Binding ServerName}" MaxLength="63" />
+      <TextBlock Text="{Binding NameWarning}" FontSize="12"
+                 Foreground="Orange" IsVisible="{Binding NameWarning, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+      <TextBlock Text="TCP port:" FontWeight="SemiBold" Margin="0,8,0,0" />
+      <TextBox Text="{Binding PortText}" />
+      <TextBlock Text="{Binding PortWarning}" FontSize="12"
+                 Foreground="Orange" IsVisible="{Binding PortWarning, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+      <TextBlock Text="Alternate TCP port:" FontWeight="SemiBold" Margin="0,8,0,0" />
+      <TextBox Text="{Binding AltPortText}" />
+      <TextBlock Text="{Binding AltPortWarning}" FontSize="12"
+                 Foreground="Orange" IsVisible="{Binding AltPortWarning, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+    </StackPanel>
+  </DockPanel>
+</UserControl>

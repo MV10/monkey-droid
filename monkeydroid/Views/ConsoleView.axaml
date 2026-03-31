@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:monkeydroid.ViewModels"
+             x:Class="monkeydroid.Views.ConsoleView"
+             x:DataType="vm:ConsoleViewModel">
+
+  <DockPanel>
+
+    <!-- Hint text -->
+    <TextBlock DockPanel.Dock="Top" Text="Enter --help, dashes are optional"
+               FontSize="11" Foreground="Gray" Margin="16,4,16,0" />
+
+    <!-- Input area at bottom -->
+    <Grid DockPanel.Dock="Bottom" ColumnDefinitions="Auto,*,Auto"
+          Margin="16,8,16,16">
+      <StackPanel Grid.Column="0" Orientation="Vertical" Spacing="2" Margin="0,0,4,0">
+        <Button Content="&#x25B2;" FontSize="10" Padding="6,2"
+                Command="{Binding HistoryUpCommand}"
+                HorizontalContentAlignment="Center" MinWidth="30" />
+        <Button Content="&#x25BC;" FontSize="10" Padding="6,2"
+                Command="{Binding HistoryDownCommand}"
+                HorizontalContentAlignment="Center" MinWidth="30" />
+      </StackPanel>
+      <TextBox Grid.Column="1" Text="{Binding InputText}" Name="InputBox"
+               Margin="0,0,4,0" />
+      <Button Grid.Column="2" Content="Send" Padding="12,8"
+              Command="{Binding SendCommand}" Classes="accent" />
+    </Grid>
+
+    <!-- Output scroll area -->
+    <ScrollViewer Name="OutputScroller">
+      <ItemsControl ItemsSource="{Binding OutputLines}" Margin="16,8">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <TextBlock Text="{Binding}" FontFamily="Consolas,Courier New,monospace"
+                       FontSize="13" TextWrapping="Wrap" />
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+  </DockPanel>
+</UserControl>

@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:monkeydroid.ViewModels"
+             xmlns:m="using:monkeydroid.Models"
+             x:Class="monkeydroid.Views.PlaylistsView"
+             x:DataType="vm:PlaylistsViewModel">
+
+  <DockPanel>
+
+    <!-- Timestamp -->
+    <TextBlock DockPanel.Dock="Top" Text="{Binding Timestamp}"
+               FontSize="11" Foreground="Gray" Margin="16,4,16,0"
+               HorizontalAlignment="Center"
+               IsVisible="{Binding Timestamp, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+    <!-- Buttons at bottom -->
+    <Grid DockPanel.Dock="Bottom" ColumnDefinitions="1*,2*,2*"
+          Margin="16,8,16,16">
+      <Button Grid.Column="0" Content="&#x21BB;" FontSize="18"
+              Command="{Binding LoadListCommand}"
+              HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+              Margin="0,0,4,0" Padding="8" />
+      <Button Grid.Column="1" Content="Add FX"
+              Command="{Binding AddFxCommand}"
+              HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+              Margin="4,0,4,0" Padding="8" />
+      <Button Grid.Column="2" Content="Next viz"
+              Command="{Binding NextVizCommand}"
+              HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+              Margin="4,0,0,0" Padding="8" />
+    </Grid>
+
+    <!-- Playlist list -->
+    <ScrollViewer>
+      <ItemsControl ItemsSource="{Binding Playlists}" Margin="16,8" Name="PlaylistItems">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate DataType="m:PlaylistInfo">
+            <Button Margin="0,2" Padding="12,8" CornerRadius="4"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    Background="{DynamicResource SystemControlBackgroundListLowBrush}">
+              <TextBlock Text="{Binding Name}" FontSize="15" />
+            </Button>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+  </DockPanel>
+</UserControl>

@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:monkeydroid.ViewModels"
+             x:Class="monkeydroid.Views.AboutView"
+             x:DataType="vm:AboutViewModel">
+
+  <DockPanel>
+    <Button DockPanel.Dock="Bottom" Content="Ok" Name="OkButton"
+            HorizontalAlignment="Center" MinWidth="100"
+            HorizontalContentAlignment="Center" Classes="accent"
+            Margin="0,0,0,24" Padding="12,8" />
+
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="16">
+      <Border HorizontalAlignment="Center"
+              Width="120" Height="120" CornerRadius="60"
+              ClipToBounds="True">
+        <Image Source="/Assets/icon.png" Stretch="UniformToFill"
+               Width="120" Height="120" />
+      </Border>
+      <TextBlock Text="monkey-droid" FontSize="20" FontWeight="Bold"
+                 HorizontalAlignment="Center" />
+      <TextBlock Text="Version 1.0" FontSize="14"
+                 HorizontalAlignment="Center" Foreground="Gray" />
+      <TextBlock Text="https://www.monkeyhihat.com/" FontSize="14"
+                 HorizontalAlignment="Center" Foreground="Gray" />
+    </StackPanel>
+  </DockPanel>
+</UserControl>
