@@ -19,6 +19,7 @@ The Monkey Hi Hat documentation provides a comprehensive list of human-available
   * Simple message dismissed by Ok button.
   * Prompt message presenting Ok and Cancel buttons.
   * Short list of menu options; tapping or clicking outside the menu will dismiss it.
+* The Windows executable, Android executable, and Android APK must have a suitable icon (/docs/icon.png).
 
 ### Technology and Dependencies
 
