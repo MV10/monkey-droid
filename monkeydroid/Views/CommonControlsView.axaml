@@ -4,14 +4,14 @@
              x:Class="monkeydroid.Views.CommonControlsView"
              x:DataType="vm:CommonControlsViewModel">
 
-  <DockPanel Margin="16">
+  <DockPanel>
 
     <TextBlock DockPanel.Dock="Top" Text="{Binding ServerLabel}"
-               FontSize="11" Foreground="Gray" Margin="0,0,0,4"
+               FontSize="11" Foreground="Gray" Margin="16,4,16,0"
                HorizontalAlignment="Center"
                IsVisible="{Binding ServerLabel, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
 
-    <Grid RowDefinitions="*,*,*,*" ColumnDefinitions="*,*">
+    <Grid RowDefinitions="*,*,*,*" ColumnDefinitions="*,*" Margin="16">
 
     <Button Grid.Row="0" Grid.Column="0" Content="What?" Command="{Binding WhatCommand}"
             Padding="16" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"

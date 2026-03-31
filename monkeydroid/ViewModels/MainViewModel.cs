@@ -1,4 +1,6 @@
+using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using monkeydroid.Services;
@@ -13,7 +15,7 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty] private bool _showHamburgerMenu;
     [ObservableProperty] private bool _showNavArrows;
     [ObservableProperty] private bool _isSplashActive = true;
-    [ObservableProperty] private bool _autoSelectServer;
+    [ObservableProperty] private string _autoSelectServer = "";
 
     private int _currentPageIndex;
     private ViewModelBase? _savedPage;
@@ -62,14 +64,18 @@ public partial class MainViewModel : ViewModelBase
             return;
         }
 
-        if (AutoSelectServer)
+        if (!string.IsNullOrEmpty(AutoSelectServer))
         {
-            var first = DataStore.Instance.Data.Servers[0];
-            DataStore.Instance.SelectedServerName = first.Name;
-            ServerListVM.SelectedServerName = first.Name;
-            NavigateToPage(1); // Playlists
-            PlaylistsVM.LoadFromCache();
-            return;
+            var server = DataStore.Instance.Data.Servers.FirstOrDefault(s =>
+                s.Name.Equals(AutoSelectServer, StringComparison.OrdinalIgnoreCase));
+            if (server is not null)
+            {
+                DataStore.Instance.SelectedServerName = server.Name;
+                ServerListVM.SelectedServerName = server.Name;
+                NavigateToPage(1); // Playlists
+                PlaylistsVM.LoadFromCache();
+                return;
+            }
         }
 
         NavigateToPage(0); // Server List
@@ -87,7 +93,7 @@ public partial class MainViewModel : ViewModelBase
         UpdateTitle();
         ShowNavigation = true;
         ShowHamburgerMenu = true;
-        ShowNavArrows = true;
+        ShowNavArrows = HasServerSelected;
     }
 
     private void UpdateTitle()
@@ -192,11 +198,20 @@ public partial class MainViewModel : ViewModelBase
         ShowNonSequenceView(editor);
     }
 
-    public void ToggleAutoSelect()
+    public void ClearAutoSelect()
     {
-        AutoSelectServer = !AutoSelectServer;
-        DataStore.Instance.Data.AutoSelectServer = AutoSelectServer;
+        AutoSelectServer = "";
+        DataStore.Instance.Data.AutoSelectServer = "";
         DataStore.Instance.Save();
+        ServerListVM.Refresh();
+    }
+
+    public void SetAutoSelect(string serverName)
+    {
+        AutoSelectServer = serverName;
+        DataStore.Instance.Data.AutoSelectServer = serverName;
+        DataStore.Instance.Save();
+        ServerListVM.Refresh();
     }
 
     public void NavigateToPlaylistsAfterSelect()

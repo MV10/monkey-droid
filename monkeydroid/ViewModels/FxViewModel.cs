@@ -34,8 +34,8 @@ public partial class FxViewModel : ViewModelBase
 
     private void UpdateTimestamp(Models.Server server)
     {
-        var ts = server.FxTimestamp?.ToString("g") ?? "";
-        Timestamp = string.IsNullOrEmpty(ts) ? "" : $"{server.Name}: {ts}";
+        var ts = server.FxTimestamp?.ToString("g");
+        Timestamp = ts is not null ? $"{server.Name}: {ts}" : server.Name;
     }
 
     [RelayCommand]
@@ -48,7 +48,7 @@ public partial class FxViewModel : ViewModelBase
         _loadCts = new CancellationTokenSource();
 
         FxList.Clear();
-        Timestamp = "";
+        Timestamp = server.Name;
         server.Fx.Clear();
 
         try

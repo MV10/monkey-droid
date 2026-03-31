@@ -34,8 +34,8 @@ public partial class PlaylistsViewModel : ViewModelBase
 
     private void UpdateTimestamp(Models.Server server)
     {
-        var ts = server.PlaylistsTimestamp?.ToString("g") ?? "";
-        Timestamp = string.IsNullOrEmpty(ts) ? "" : $"{server.Name}: {ts}";
+        var ts = server.PlaylistsTimestamp?.ToString("g");
+        Timestamp = ts is not null ? $"{server.Name}: {ts}" : server.Name;
     }
 
     [RelayCommand]
@@ -48,7 +48,7 @@ public partial class PlaylistsViewModel : ViewModelBase
         _loadCts = new CancellationTokenSource();
 
         Playlists.Clear();
-        Timestamp = "";
+        Timestamp = server.Name;
         server.Playlists.Clear();
 
         try

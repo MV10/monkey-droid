@@ -12,6 +12,7 @@ public class DataStore
 
     public AppData Data { get; private set; } = new();
     public string? SelectedServerName { get; set; }
+    public bool LoadFailed { get; private set; }
 
     private static readonly string DataDir = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -23,6 +24,8 @@ public class DataStore
 
     public void Load()
     {
+        LoadFailed = false;
+
         if (!File.Exists(DataFile))
         {
             Data = new AppData();
@@ -35,7 +38,17 @@ public class DataStore
             Data = new AppData();
             return;
         }
-        Data = JsonSerializer.Deserialize(json, AppDataJsonContext.Default.AppData) ?? new AppData();
+
+        try
+        {
+            Data = JsonSerializer.Deserialize(json, AppDataJsonContext.Default.AppData) ?? new AppData();
+        }
+        catch
+        {
+            Data = new AppData();
+            File.WriteAllText(DataFile, "");
+            LoadFailed = true;
+        }
     }
 
     public void Save()

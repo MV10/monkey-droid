@@ -34,8 +34,8 @@ public partial class VisualizersViewModel : ViewModelBase
 
     private void UpdateTimestamp(Models.Server server)
     {
-        var ts = server.VisualizersTimestamp?.ToString("g") ?? "";
-        Timestamp = string.IsNullOrEmpty(ts) ? "" : $"{server.Name}: {ts}";
+        var ts = server.VisualizersTimestamp?.ToString("g");
+        Timestamp = ts is not null ? $"{server.Name}: {ts}" : server.Name;
     }
 
     [RelayCommand]
@@ -48,7 +48,7 @@ public partial class VisualizersViewModel : ViewModelBase
         _loadCts = new CancellationTokenSource();
 
         Visualizers.Clear();
-        Timestamp = "";
+        Timestamp = server.Name;
         server.Visualizers.Clear();
 
         try

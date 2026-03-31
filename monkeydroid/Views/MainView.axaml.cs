@@ -38,9 +38,12 @@ public partial class MainView : UserControl
 
         DataStore.Instance.Load();
 
-        await Task.Delay(5000);
+        await Task.Delay(3000);
 
         vm.StartupNavigation();
+
+        if (DataStore.Instance.LoadFailed)
+            ShowMessageOverlay("Data file was unreadable, server list reset.");
     }
 
     // --- Swipe navigation ---
@@ -76,23 +79,17 @@ public partial class MainView : UserControl
         if (_overlayVisible) return;
         if (DataContext is not MainViewModel vm) return;
 
-        ShowMenuOverlay(new[]
+        var hasAutoSelect = !string.IsNullOrEmpty(vm.AutoSelectServer);
+        var menuItems = hasAutoSelect
+            ? new[] { "Help", "Docs", "Get support", "About", "", "Clear auto-selected server", "", "Reset" }
+            : new[] { "Help", "Docs", "Get support", "About", "", "Reset" };
+
+        ShowMenuOverlay(menuItems, menuItem =>
         {
-            "Help",
-            "Docs",
-            "Get support",
-            "About",
-            "",
-            vm.AutoSelectServer ? "\u2713 Auto-select server" : "\u2022 Auto-select server",
-            "",
-            "Reset",
-        }, menuItem =>
-        {
-            var item = menuItem.TrimStart('\u2713', '\u2022', ' ');
-            switch (item)
+            switch (menuItem)
             {
-                case "Auto-select server":
-                    vm.ToggleAutoSelect();
+                case "Clear auto-selected server":
+                    vm.ClearAutoSelect();
                     break;
                 case "Help":
                     vm.ShowNonSequenceView(new HelpViewModel());
@@ -111,7 +108,7 @@ public partial class MainView : UserControl
                     {
                         if (!confirmed) return;
                         DataStore.Instance.Reset();
-                        vm.AutoSelectServer = false;
+                        vm.AutoSelectServer = "";
                         vm.StartupNavigation();
                     });
                     break;

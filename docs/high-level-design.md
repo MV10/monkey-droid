@@ -40,7 +40,7 @@ The Hamburger Menu is available on all swipe-sequence views.
 * Get support
 * About
 * (separator)
-* Auto-select server
+* Clear auto-select server
 * (separator)
 * Reset
 
@@ -50,19 +50,20 @@ The Hamburger Menu is available on all swipe-sequence views.
 * Docs: Opens the default browser to https://www.monkeyhihat.com/docs/index.php#/using-monkey-hi-hat?id=remote-control-monkey-droid-gui
 * Get support: Opens the default browser to https://www.monkeyhihat.com/docs/index.php#/troubleshooting
 * About: Loads the About Screen view
-* Auto-select server: Selecting this toggles a setting on-off, indicated with a dot (off) or a checkmark (on)
+* Clear auto-select server: Resets the auto-selected server name to blank (stored in the server data file)
 * Reset: Prompts for confirmation, then blanks (does not delete) the server data file, then resets application state as if restarted
 
 
 ## Views: General Information
 
 * When a server has been selected, the user can change views. Some views are not in this sequence.
+* If no server is selected, the user can't navigate away from the Server List view and the nav buttons are hidden.
 * User changes views by clicking left-arrow or right-arrow buttons in the toolbar, or on Android, by swiping left or right.
 * A Splash Screen view is shown while the app is loading (and for a minimum of 5 seconds).
 * The Help Screen and About Screen views are dismissed by tapping or clicking on an OK button.
 * At startup if no server file exists, go to the Server Editor view in add mode.
-* At startup if the server file exists and the Auto-select feature is on, select the first server and go to the Playlist view.
-* At startup if the server file exists and the Auto-select feature is off, go to the Server List view.
+* At startup if the server file exists and an auto-selected server name exists, select it and go to the Playlist view.
+* At startup if the server file exists but no auto-selected server name exists, go to the Server List view.
 
 ### Views in swipe sequence
  
@@ -84,7 +85,7 @@ The Hamburger Menu is available on all swipe-sequence views.
 ## Stored Data
 
 * Data is serialized as JSON in a plain text file.
-* A flag is stored relating to the hamburger menu's "Auto-select server" option (0/1 boolean).
+* An auto-selected server name is stored (empty string if none).
 * Each server is identified by a unique name corresponding to that device's network name.
 * Server entries are stored in alphabetical order by server name.
 * Each server has a name, a main TCP port number, and an alternate port number.
@@ -106,7 +107,7 @@ The Hamburger Menu is available on all swipe-sequence views.
 
 ### Splash Screen view
 
-* The Splash is shown during loading (and for a minimum of 5 seconds).
+* The Splash is shown during loading (and for a minimum of 3 seconds).
 * There is no titlebar.
 * It is blank with a circular-masked version of the `docs/icon.png` image.
 * It cannot be dismissed by the user.
@@ -148,12 +149,14 @@ The Hamburger Menu is available on all swipe-sequence views.
 
 * List of known (saved) servers sorted alphabetically by name.
 * List items are two-row showing the server name, then below, in smaller text, the TCP port and, if available, the alternate port.
-* Each list item has a "selected" indicator (icon TBD) and only one server can be selected at any time.
+* If the server is the auto-selected one, "(auto-selected)" will be shown below the server name after the TCP ports. 
+* Each list item has a "selected" indicator (Unicode U+25CF, de-selected is U+25CB) and only one server can be selected at any time.
 * User cannot swipe or advance to another view if no server is selected.
 * When the user taps a server entry in the list a simple menu opens with these options:
   * Select: marks the server as selected and navigates the user to the Playlist view.
   * Test: executes the CommandLineSwitchPipe's `TryConnect` and displays a "Success" or "Failed" overlay message.
   * Edit: opens the server data in the Server Editor view in edit mode.
+  * Auto-select at startup / Disable auto-select: saves the server name for startup auto-select, or clears the auto-select name
   * Delete: shows an Ok / Cancel overlay message warning that the server will be permanently deleted.
   * Cancel: dismisses the menu.
 * If the only server entry is deleted, the user will be forced to view the Server Editor in add mode again.

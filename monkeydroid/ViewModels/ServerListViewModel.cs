@@ -25,8 +25,20 @@ public partial class ServerListViewModel : ViewModelBase
     public void Refresh()
     {
         Servers.Clear();
+        var autoName = DataStore.Instance.Data.AutoSelectServer;
+        var selectedName = DataStore.Instance.SelectedServerName;
         foreach (var s in DataStore.Instance.Data.Servers.OrderBy(s => s.Name, StringComparer.OrdinalIgnoreCase))
+        {
+            s.DisplayName = s.Name.Equals(selectedName, StringComparison.OrdinalIgnoreCase)
+                ? $"\u25CF  {s.Name}" : $"\u25CB  {s.Name}";
+            var parts = $"Port: {s.Port}";
+            if (s.AlternatePort.HasValue)
+                parts += $"   Alt: {s.AlternatePort}";
+            if (s.Name.Equals(autoName, StringComparison.OrdinalIgnoreCase))
+                parts += "   (auto-selected)";
+            s.Subtitle = parts;
             Servers.Add(s);
+        }
         SelectedServerName = DataStore.Instance.SelectedServerName;
     }
 
@@ -55,6 +67,8 @@ public partial class ServerListViewModel : ViewModelBase
         DataStore.Instance.Data.Servers.Remove(server);
         if (DataStore.Instance.SelectedServerName == server.Name)
             DataStore.Instance.SelectedServerName = null;
+        if (server.Name.Equals(DataStore.Instance.Data.AutoSelectServer, StringComparison.OrdinalIgnoreCase))
+            DataStore.Instance.Data.AutoSelectServer = "";
         DataStore.Instance.Save();
         Refresh();
     }

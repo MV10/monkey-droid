@@ -33,7 +33,10 @@ public partial class ServerListView : UserControl
         var mainView = this.FindAncestorOfType<MainView>();
         if (mainView is null) return;
 
-        var menuItems = new[] { "Select", "Test", "Edit", "Delete", "", "Cancel" };
+        var isAutoSelect = server.Name.Equals(DataStore.Instance.Data.AutoSelectServer, System.StringComparison.OrdinalIgnoreCase);
+        var autoSelectLabel = isAutoSelect ? "Disable auto-select" : "Auto-select at startup";
+        var menuItems = new[] { "Select", "Test", "Edit", autoSelectLabel, "Delete", "", "Cancel" };
+
         mainView.ShowMenuOverlay(menuItems, async selected =>
         {
             var vm = mainView.DataContext as MainViewModel;
@@ -49,6 +52,12 @@ public partial class ServerListView : UserControl
                     break;
                 case "Edit":
                     vm?.ShowServerEditor(isAddMode: false, server);
+                    break;
+                case "Auto-select at startup":
+                    vm?.SetAutoSelect(server.Name);
+                    break;
+                case "Disable auto-select":
+                    vm?.ClearAutoSelect();
                     break;
                 case "Delete":
                     mainView.ShowPromptOverlay(

@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace monkeydroid.Models;
 
 public class AppData
 {
-    public bool AutoSelectServer { get; set; }
+    public string AutoSelectServer { get; set; } = "";
     public List<Server> Servers { get; set; } = new();
 }
 
@@ -20,6 +21,12 @@ public class Server
     public DateTime? VisualizersTimestamp { get; set; }
     public DateTime? FxTimestamp { get; set; }
     public DateTime? PlaylistsTimestamp { get; set; }
+
+    [JsonIgnore]
+    public string DisplayName { get; set; } = "";
+
+    [JsonIgnore]
+    public string Subtitle { get; set; } = "";
 }
 
 public class VisualizerInfo

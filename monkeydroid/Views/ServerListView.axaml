@@ -22,14 +22,8 @@
                     HorizontalContentAlignment="Stretch"
                     Background="{DynamicResource SystemControlBackgroundListLowBrush}">
               <StackPanel>
-                <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="SemiBold" />
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                  <TextBlock Text="{Binding Port, StringFormat='Port: {0}'}"
-                             FontSize="12" Foreground="Gray" />
-                  <TextBlock Text="{Binding AlternatePort, StringFormat='Alt: {0}'}"
-                             FontSize="12" Foreground="Gray"
-                             IsVisible="{Binding AlternatePort, Converter={x:Static ObjectConverters.IsNotNull}}" />
-                </StackPanel>
+                <TextBlock Text="{Binding DisplayName}" FontSize="16" FontWeight="SemiBold" />
+                <TextBlock Text="{Binding Subtitle}" FontSize="12" Foreground="Gray" />
               </StackPanel>
             </Button>
           </DataTemplate>
