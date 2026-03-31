@@ -9,69 +9,112 @@ namespace monkeydroid.Services;
 
 public static class BackgroundListLoader
 {
+    private static readonly SemaphoreSlim _semaphore = new(1, 1);
+
+    public static bool IsDownloading { get; private set; }
+    public static event Action<bool>? IsDownloadingChanged;
+
     public static async Task LoadVisualizersAsync(
         Server server, Action<VisualizerInfo> onItem, CancellationToken ct)
     {
-        var names = await FetchFileList(server, "viz", ct);
-        if (names is null) return;
-
-        foreach (var name in names)
+        await _semaphore.WaitAsync(ct);
+        IsDownloading = true;
+        IsDownloadingChanged?.Invoke(true);
+        try
         {
-            ct.ThrowIfCancellationRequested();
-            await Task.Delay(500, ct);
+            var names = await FetchFileList(server, "viz", ct);
+            if (names is null) return;
 
-            if (!await CommsService.SendCommand(server, "--md.detail", name))
-                continue;
-
-            var response = CommsService.GetResponse();
-            if (response.Length < 2) continue;
-
-            var info = new VisualizerInfo
+            foreach (var name in names)
             {
-                Name = name,
-                Audio = response[0] == '1',
-                Description = response[1..],
-            };
-            onItem(info);
+                ct.ThrowIfCancellationRequested();
+                await Task.Delay(500, ct);
+
+                if (!await CommsService.SendCommand(server, "--md.detail", name))
+                    continue;
+
+                var response = CommsService.GetResponse();
+                if (response.StartsWith("ERR", StringComparison.Ordinal)) return;
+                if (response.Length < 2) continue;
+
+                var info = new VisualizerInfo
+                {
+                    Name = name,
+                    Audio = response[0] == '1',
+                    Description = response[1..],
+                };
+                onItem(info);
+            }
+        }
+        finally
+        {
+            IsDownloading = false;
+            IsDownloadingChanged?.Invoke(false);
+            _semaphore.Release();
         }
     }
 
     public static async Task LoadFxAsync(
         Server server, Action<FxInfo> onItem, CancellationToken ct)
     {
-        var names = await FetchFileList(server, "fx", ct);
-        if (names is null) return;
-
-        foreach (var name in names)
+        await _semaphore.WaitAsync(ct);
+        IsDownloading = true;
+        IsDownloadingChanged?.Invoke(true);
+        try
         {
-            ct.ThrowIfCancellationRequested();
-            await Task.Delay(500, ct);
+            var names = await FetchFileList(server, "fx", ct);
+            if (names is null) return;
 
-            if (!await CommsService.SendCommand(server, "--md.detailfx", name))
-                continue;
-
-            var response = CommsService.GetResponse();
-            if (response.Length < 2) continue;
-
-            var info = new FxInfo
+            foreach (var name in names)
             {
-                Name = name,
-                Audio = response[0] == '1',
-                Description = response[1..],
-            };
-            onItem(info);
+                ct.ThrowIfCancellationRequested();
+                await Task.Delay(500, ct);
+
+                if (!await CommsService.SendCommand(server, "--md.detailfx", name))
+                    continue;
+
+                var response = CommsService.GetResponse();
+                if (response.StartsWith("ERR", StringComparison.Ordinal)) return;
+                if (response.Length < 2) continue;
+
+                var info = new FxInfo
+                {
+                    Name = name,
+                    Audio = response[0] == '1',
+                    Description = response[1..],
+                };
+                onItem(info);
+            }
+        }
+        finally
+        {
+            IsDownloading = false;
+            IsDownloadingChanged?.Invoke(false);
+            _semaphore.Release();
         }
     }
 
     public static async Task LoadPlaylistsAsync(
         Server server, Action<PlaylistInfo> onItem, CancellationToken ct)
     {
-        var names = await FetchFileList(server, "playlists", ct);
-        if (names is null) return;
-
-        foreach (var name in names)
+        await _semaphore.WaitAsync(ct);
+        IsDownloading = true;
+        IsDownloadingChanged?.Invoke(true);
+        try
         {
-            onItem(new PlaylistInfo { Name = name });
+            var names = await FetchFileList(server, "playlists", ct);
+            if (names is null) return;
+
+            foreach (var name in names)
+            {
+                onItem(new PlaylistInfo { Name = name });
+            }
+        }
+        finally
+        {
+            IsDownloading = false;
+            IsDownloadingChanged?.Invoke(false);
+            _semaphore.Release();
         }
     }
 
@@ -84,7 +127,7 @@ public static class BackgroundListLoader
             return null;
 
         var response = CommsService.GetResponse();
-        if (string.IsNullOrEmpty(response))
+        if (string.IsNullOrEmpty(response) || response.StartsWith("ERR", StringComparison.Ordinal))
             return null;
 
         return response

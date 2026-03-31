@@ -15,10 +15,17 @@ public partial class VisualizersViewModel : ViewModelBase
     public string Title => "Visualizers";
 
     [ObservableProperty] private string _timestamp = "";
+    [ObservableProperty] private bool _isNotDownloading = true;
 
     public ObservableCollection<VisualizerInfo> Visualizers { get; } = new();
 
     private CancellationTokenSource? _loadCts;
+
+    public VisualizersViewModel()
+    {
+        BackgroundListLoader.IsDownloadingChanged += downloading =>
+            IsNotDownloading = !downloading;
+    }
 
     public void LoadFromCache()
     {
@@ -38,7 +45,7 @@ public partial class VisualizersViewModel : ViewModelBase
         Timestamp = ts is not null ? $"{server.Name}: {ts}" : server.Name;
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(IsNotDownloading))]
     private async Task LoadList()
     {
         var server = DataStore.Instance.GetSelectedServer();

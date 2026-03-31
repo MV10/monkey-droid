@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using CommandLineSwitchPipe;
 using monkeydroid.Models;
@@ -8,6 +9,9 @@ public static class CommsService
 {
     public static string SeparatorCode =>
         CommandLineSwitchServer.Options.Advanced.SeparatorControlCode;
+
+    public static event Action<string>? ErrorReceived;
+    public static bool SuppressErrorEvent { get; set; }
 
     public static async Task<bool> TryConnect(Server server)
     {
@@ -22,13 +26,22 @@ public static class CommsService
 
     public static async Task<bool> SendCommand(Server server, params string[] args)
     {
+        bool sent;
         if (await CommandLineSwitchServer.TrySendArgs(args, server.Name, server.Port))
-            return true;
+            sent = true;
+        else if (server.AlternatePort.HasValue)
+            sent = await CommandLineSwitchServer.TrySendArgs(args, server.Name, server.AlternatePort.Value);
+        else
+            sent = false;
 
-        if (server.AlternatePort.HasValue)
-            return await CommandLineSwitchServer.TrySendArgs(args, server.Name, server.AlternatePort.Value);
+        if (sent)
+        {
+            var response = CommandLineSwitchServer.QueryResponse ?? "";
+            if (!SuppressErrorEvent && response.StartsWith("ERR", StringComparison.Ordinal))
+                ErrorReceived?.Invoke(response);
+        }
 
-        return false;
+        return sent;
     }
 
     public static string GetResponse() => CommandLineSwitchServer.QueryResponse ?? "";

@@ -15,6 +15,7 @@ public partial class MainView : UserControl
 {
     private bool _overlayVisible;
     private Point _pointerPressedPoint;
+    private bool _pointerPressedValid;
     private const double SwipeThreshold = 80;
 
     public MainView()
@@ -25,6 +26,7 @@ public partial class MainView : UserControl
         AddHandler(PointerReleasedEvent, OnPointerReleasedTunnel, RoutingStrategies.Tunnel);
 
         HamburgerButton.Click += OnHamburgerClick;
+        CommsService.ErrorReceived += msg => ShowMessageOverlay(msg);
 
         Loaded += OnLoaded;
     }
@@ -33,6 +35,7 @@ public partial class MainView : UserControl
     {
         if (DataContext is not MainViewModel vm) return;
 
+        vm.ShowMessage += msg => ShowMessageOverlay(msg);
         vm.InitializePages();
         vm.ShowSplash();
 
@@ -50,13 +53,14 @@ public partial class MainView : UserControl
 
     private void OnPointerPressedTunnel(object? sender, PointerPressedEventArgs e)
     {
-        if (_overlayVisible) return;
+        _pointerPressedValid = !_overlayVisible;
+        if (!_pointerPressedValid) return;
         _pointerPressedPoint = e.GetPosition(this);
     }
 
     private void OnPointerReleasedTunnel(object? sender, PointerReleasedEventArgs e)
     {
-        if (_overlayVisible) return;
+        if (!_pointerPressedValid || _overlayVisible) return;
         if (DataContext is not MainViewModel vm) return;
         if (vm.IsSplashActive) return;
 
@@ -81,8 +85,8 @@ public partial class MainView : UserControl
 
         var hasAutoSelect = !string.IsNullOrEmpty(vm.AutoSelectServer);
         var menuItems = hasAutoSelect
-            ? new[] { "Help", "Docs", "Get support", "About", "", "Clear auto-selected server", "", "Reset" }
-            : new[] { "Help", "Docs", "Get support", "About", "", "Reset" };
+            ? new[] { "Docs", "Get support", "About", "", "Clear auto-selected server", "", "Wipe all saved data" }
+            : new[] { "Docs", "Get support", "About", "", "Wipe all saved data" };
 
         ShowMenuOverlay(menuItems, menuItem =>
         {
@@ -90,9 +94,6 @@ public partial class MainView : UserControl
             {
                 case "Clear auto-selected server":
                     vm.ClearAutoSelect();
-                    break;
-                case "Help":
-                    vm.ShowNonSequenceView(new HelpViewModel());
                     break;
                 case "About":
                     vm.ShowNonSequenceView(new AboutViewModel());
@@ -103,7 +104,7 @@ public partial class MainView : UserControl
                 case "Get support":
                     LaunchUri("https://www.monkeyhihat.com/docs/index.php#/troubleshooting");
                     break;
-                case "Reset":
+                case "Wipe all saved data":
                     ShowPromptOverlay("Reset all data and restart?", confirmed =>
                     {
                         if (!confirmed) return;

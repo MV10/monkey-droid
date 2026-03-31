@@ -8,9 +8,11 @@
   <DockPanel>
 
     <!-- Add button at bottom -->
-    <Button DockPanel.Dock="Bottom" Content="Add Server" Name="AddButton"
-            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-            Margin="16,8,16,16" Padding="12" Classes="accent" />
+    <Grid DockPanel.Dock="Bottom" ColumnDefinitions="3*,4*,3*" Margin="16,8,16,16">
+      <Button Grid.Column="1" Content="Add Server" Name="AddButton"
+              HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+              Padding="12" Classes="accent" />
+    </Grid>
 
     <!-- Server list -->
     <ScrollViewer>

@@ -16,10 +16,10 @@
       <StackPanel Grid.Column="0" Orientation="Vertical" Spacing="2" Margin="0,0,4,0">
         <Button Content="&#x25B2;" FontSize="10" Padding="6,2"
                 Command="{Binding HistoryUpCommand}"
-                HorizontalContentAlignment="Center" MinWidth="30" />
+                HorizontalContentAlignment="Center" MinWidth="30" Classes="accent" />
         <Button Content="&#x25BC;" FontSize="10" Padding="6,2"
                 Command="{Binding HistoryDownCommand}"
-                HorizontalContentAlignment="Center" MinWidth="30" />
+                HorizontalContentAlignment="Center" MinWidth="30" Classes="accent" />
       </StackPanel>
       <TextBox Grid.Column="1" Text="{Binding InputText}" Name="InputBox"
                Margin="0,0,4,0" />

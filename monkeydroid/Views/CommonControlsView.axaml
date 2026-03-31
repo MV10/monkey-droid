@@ -15,31 +15,31 @@
 
     <Button Grid.Row="0" Grid.Column="0" Content="What?" Command="{Binding WhatCommand}"
             Padding="16" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-            VerticalAlignment="Center" Margin="20,4" />
+            VerticalAlignment="Center" Margin="20,4" Classes="accent" />
     <Button Grid.Row="0" Grid.Column="1" Content="Track" Command="{Binding TrackCommand}"
             Padding="16" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-            VerticalAlignment="Center" Margin="20,4" />
+            VerticalAlignment="Center" Margin="20,4" Classes="accent" />
 
     <Button Grid.Row="1" Grid.Column="0" Content="Standby" Command="{Binding StandbyCommand}"
             Padding="16" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-            VerticalAlignment="Center" Margin="20,4" />
+            VerticalAlignment="Center" Margin="20,4" Classes="accent" />
     <Button Grid.Row="1" Grid.Column="1" Content="Quit" Command="{Binding QuitCommand}"
             Padding="16" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-            VerticalAlignment="Center" Margin="20,4" />
+            VerticalAlignment="Center" Margin="20,4" Classes="accent" />
 
     <Button Grid.Row="2" Grid.Column="0" Content="Fullscreen" Command="{Binding FullscreenCommand}"
             Padding="16" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-            VerticalAlignment="Center" Margin="20,4" />
+            VerticalAlignment="Center" Margin="20,4" Classes="accent" />
     <Button Grid.Row="2" Grid.Column="1" Content="Idle" Command="{Binding IdleCommand}"
             Padding="16" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-            VerticalAlignment="Center" Margin="20,4" />
+            VerticalAlignment="Center" Margin="20,4" Classes="accent" />
 
     <Button Grid.Row="3" Grid.Column="0" Content="FPS" Command="{Binding FpsCommand}"
             Padding="16" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-            VerticalAlignment="Center" Margin="20,4" />
+            VerticalAlignment="Center" Margin="20,4" Classes="accent" />
     <Button Grid.Row="3" Grid.Column="1" Content="Info" Command="{Binding InfoCommand}" Name="InfoButton"
             Padding="16" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-            VerticalAlignment="Center" Margin="20,4" />
+            VerticalAlignment="Center" Margin="20,4" Classes="accent" />
 
     </Grid>
   </DockPanel>

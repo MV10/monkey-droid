@@ -19,15 +19,15 @@
       <Button Grid.Column="0" Content="&#x21BB;" FontSize="18"
               Command="{Binding LoadListCommand}"
               HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-              Margin="0,0,4,0" Padding="8" />
+              Margin="0,0,4,0" Padding="8" Classes="accent" />
       <Button Grid.Column="1" Content="Add FX"
               Command="{Binding AddFxCommand}"
               HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-              Margin="4,0,4,0" Padding="8" />
+              Margin="4,0,4,0" Padding="8" Classes="accent" />
       <Button Grid.Column="2" Content="Next viz"
               Command="{Binding NextVizCommand}"
               HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-              Margin="4,0,0,0" Padding="8" />
+              Margin="4,0,0,0" Padding="8" Classes="accent" />
     </Grid>
 
     <!-- Playlist list -->

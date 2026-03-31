@@ -14,7 +14,7 @@
               HorizontalContentAlignment="Center" Classes="accent" />
       <Button Content="Cancel" Command="{Binding CancelCommand}"
               IsVisible="{Binding CanCancel}" MinWidth="100"
-              HorizontalContentAlignment="Center" />
+              HorizontalContentAlignment="Center" Classes="accent" />
     </StackPanel>
 
     <!-- Input fields -->

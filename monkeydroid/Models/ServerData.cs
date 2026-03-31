@@ -34,6 +34,9 @@ public class VisualizerInfo
     public string Name { get; set; } = "";
     public string Description { get; set; } = "";
     public bool Audio { get; set; }
+
+    [JsonIgnore]
+    public string AudioIcon => Audio ? "\u266A" : "\u3030";
 }
 
 public class FxInfo
@@ -41,6 +44,9 @@ public class FxInfo
     public string Name { get; set; } = "";
     public string Description { get; set; } = "";
     public bool Audio { get; set; }
+
+    [JsonIgnore]
+    public string AudioIcon => Audio ? "\u266A" : "\u3030";
 }
 
 public class PlaylistInfo

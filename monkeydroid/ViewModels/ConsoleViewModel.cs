@@ -42,11 +42,19 @@ public partial class ConsoleViewModel : ViewModelBase
             return;
         }
 
-        if (await CommsService.SendCommand(server, parts))
+        CommsService.SuppressErrorEvent = true;
+        try
         {
-            var response = CommsService.GetResponse();
-            if (!string.IsNullOrEmpty(response))
-                AddOutputLine(response);
+            if (await CommsService.SendCommand(server, parts))
+            {
+                var response = CommsService.GetResponse();
+                if (!string.IsNullOrEmpty(response))
+                    AddOutputLine(response);
+            }
+        }
+        finally
+        {
+            CommsService.SuppressErrorEvent = false;
         }
     }
 

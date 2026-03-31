@@ -15,10 +15,17 @@ public partial class FxViewModel : ViewModelBase
     public string Title => "FX";
 
     [ObservableProperty] private string _timestamp = "";
+    [ObservableProperty] private bool _isNotDownloading = true;
 
     public ObservableCollection<FxInfo> FxList { get; } = new();
 
     private CancellationTokenSource? _loadCts;
+
+    public FxViewModel()
+    {
+        BackgroundListLoader.IsDownloadingChanged += downloading =>
+            IsNotDownloading = !downloading;
+    }
 
     public void LoadFromCache()
     {
@@ -38,7 +45,7 @@ public partial class FxViewModel : ViewModelBase
         Timestamp = ts is not null ? $"{server.Name}: {ts}" : server.Name;
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(IsNotDownloading))]
     private async Task LoadList()
     {
         var server = DataStore.Instance.GetSelectedServer();

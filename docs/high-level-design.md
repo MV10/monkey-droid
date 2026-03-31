@@ -42,16 +42,15 @@ The Hamburger Menu is available on all swipe-sequence views.
 * (separator)
 * Clear auto-select server
 * (separator)
-* Reset
+* Wipe all saved data
 
 ### Hamburger menu behaviors
 
-* Help: Loads the Help Screen view
 * Docs: Opens the default browser to https://www.monkeyhihat.com/docs/index.php#/using-monkey-hi-hat?id=remote-control-monkey-droid-gui
 * Get support: Opens the default browser to https://www.monkeyhihat.com/docs/index.php#/troubleshooting
 * About: Loads the About Screen view
 * Clear auto-select server: Resets the auto-selected server name to blank (stored in the server data file)
-* Reset: Prompts for confirmation, then blanks (does not delete) the server data file, then resets application state as if restarted
+* Wipe all saved data: Prompts for confirmation, then blanks (does not delete) the server data file, then resets application state as if restarted
 
 
 ## Views: General Information
@@ -61,7 +60,8 @@ The Hamburger Menu is available on all swipe-sequence views.
 * User changes views by clicking left-arrow or right-arrow buttons in the toolbar, or on Android, by swiping left or right.
 * A Splash Screen view is shown while the app is loading (and for a minimum of 5 seconds).
 * The Help Screen and About Screen views are dismissed by tapping or clicking on an OK button.
-* At startup if no server file exists, go to the Server Editor view in add mode.
+* At startup if no server file exists, go to the Server Editor view in add mode. 
+* After saving the first and only server, this will become the auto-selected server, select it and go to the Playlist view.
 * At startup if the server file exists and an auto-selected server name exists, select it and go to the Playlist view.
 * At startup if the server file exists but no auto-selected server name exists, go to the Server List view.
 
@@ -120,13 +120,6 @@ The Hamburger Menu is available on all swipe-sequence views.
 * It has a smaller circular-masked version of the `docs/icon.png` image like Splash Screen uses.
 * Below the icon are three lines: the app name (monkey-droid), the app version, and `https://www.monkeyhihat.com/`
 
-### Help Screen view
-
-* The Help Screen is shown when loaded from the Hamburger Menu.
-* The titlebar is labeled "Help".
-* It is dismissed by tapping it (user returns to previous view).
-* Content is TBD. For now just show the text "Help".
-
 ### Server Editor view
 
 * The Server Editor view can be used in add mode or edit mode.
@@ -144,6 +137,9 @@ The Hamburger Menu is available on all swipe-sequence views.
 * Cancel is not available if there are no known servers.
 * Save is not available until at least a name and valid port is entered.
 * Upon exiting, the user is sent to the Server List view.
+* If the saved entry is new (not edited) and is the only server in the list:
+  * Also save the server name as auto-selected.
+  * Show an overlay message, "This server will be auto-selected at startup."
 
 ### Server List view
 
@@ -169,7 +165,7 @@ The Hamburger Menu is available on all swipe-sequence views.
 * Below the titlebar in small text is the timestamp for the data list, if any.
 * The main content is a list of the known visualizers loaded from the selected server.
 * List items are two-row showing an icon and the visualizer name, then below, in smaller text, the visualizer description.
-* The icon indicates whether the visualizer is music-reactive. Specific icons TBD.
+* The icon indicates whether the visualizer is music-reactive. Music reactive uses Unicode U+266A and non-reactive is U+3030.
 * Selecting any list item sends a two-string command, `--load` and the selected visualizer name.
 * Below the list at the bottom of the screen are two buttons:
   * A load-list icon button (specific icon TBD) which is narrow (20% of the width)
@@ -187,7 +183,7 @@ The Hamburger Menu is available on all swipe-sequence views.
 * Below the titlebar in small text is the timestamp for the data list, if any.
 * The main content is a list of the known effects (FX) loaded from the selected server.
 * List items are two-row showing an icon and the FX name, then below, in smaller text, the FX description.
-* The icon indicates whether the FX is music-reactive. Specific icons TBD.
+* The icon indicates whether the FX is music-reactive. Music reactive uses Unicode U+266A and non-reactive is U+3030.
 * Selecting any list item sends a two-string command, `--fx` and the selected FX name.
 * Below the list at the bottom of the screen is one button:
   * A load-list icon button (specific icon TBD) which is narrow (20% of the width)
@@ -256,7 +252,8 @@ The Hamburger Menu is available on all swipe-sequence views.
 * The `TryConnect` and `TrySendArgs` methods return a boolean indicating success or failure.
 * `TrySendArgs` also requires a string array of command line switches (aka arguments) to transmit to the server.
 * The `QueryResponse` method returns a string and is used after `TrySendArgs` succeeds.
-* Failure is silent except in response to the Test command from the Server List view.
+* Monkey Hi Hat may respond with a string beginning with "ERR" to indicate an error. 
+* Failure is silent except in response to the Test command from the Server List view, or in response to error messages (exception: Console view, just output to history).
 
 ### Monkey Hi Hat arguments
 
@@ -289,3 +286,4 @@ The Hamburger Menu is available on all swipe-sequence views.
 * The response is a single string:
   * The first character is `0` or `1` where 1 indicates the visualizer or FX is audio-reactive, and 0 is not.
   * The remainder of the string is the description of the file.
+* If an error is signaled (response begins with "ERR") during background processing, abort the download loop. 

@@ -21,6 +21,12 @@ fi
 read -sp "Keystore password: " KSPASS
 echo ""
 
+# Validate the password before building
+if ! keytool -list -keystore "$KEYSTORE" -storepass "$KSPASS" > /dev/null 2>&1; then
+  echo "ERROR: Incorrect keystore password."
+  exit 1
+fi
+
 dotnet publish ../monkeydroid.Android/monkeydroid.Android.csproj \
   -c Release \
   -p:AndroidKeyStore=true \

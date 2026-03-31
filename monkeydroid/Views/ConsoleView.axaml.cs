@@ -1,5 +1,6 @@
 using System.Collections.Specialized;
 using Avalonia.Controls;
+using Avalonia.Input;
 using monkeydroid.ViewModels;
 
 namespace monkeydroid.Views;
@@ -10,6 +11,16 @@ public partial class ConsoleView : UserControl
     {
         InitializeComponent();
         DataContextChanged += OnDataContextChanged;
+        InputBox.KeyDown += OnInputKeyDown;
+    }
+
+    private void OnInputKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter && DataContext is ConsoleViewModel vm)
+        {
+            vm.SendCommand.Execute(null);
+            e.Handled = true;
+        }
     }
 
     private void OnDataContextChanged(object? sender, System.EventArgs e)

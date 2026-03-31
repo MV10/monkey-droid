@@ -22,6 +22,8 @@ public partial class MainViewModel : ViewModelBase
     private int _savedPageIndex;
     private bool _isNonSequenceView;
 
+    public event Action<string>? ShowMessage;
+
     public ObservableCollection<ViewModelBase> Pages { get; } = new();
 
     // Page VMs accessible for wiring events
@@ -107,7 +109,6 @@ public partial class MainViewModel : ViewModelBase
             FxViewModel vm => vm.Title,
             ConsoleViewModel vm => vm.Title,
             AboutViewModel vm => vm.Title,
-            HelpViewModel vm => vm.Title,
             ServerEditorViewModel vm => vm.Title,
             _ => "",
         };
@@ -173,6 +174,7 @@ public partial class MainViewModel : ViewModelBase
             _currentPageIndex = _savedPageIndex;
             _savedPage = null;
             UpdateTitle();
+            ShowNavArrows = HasServerSelected;
         }
         else
         {
@@ -185,11 +187,24 @@ public partial class MainViewModel : ViewModelBase
     public void ShowServerEditor(bool isAddMode, Models.Server? server = null)
     {
         var editor = new ServerEditorViewModel(isAddMode, server);
+        editor.ShowMessage += msg => ShowMessage?.Invoke(msg);
         editor.SaveRequested += () =>
         {
+            AutoSelectServer = DataStore.Instance.Data.AutoSelectServer;
             ReturnFromNonSequenceView();
             ServerListVM.Refresh();
-            NavigateToPage(0);
+
+            if (editor.FirstServerAdded)
+            {
+                DataStore.Instance.SelectedServerName = AutoSelectServer;
+                ServerListVM.SelectedServerName = AutoSelectServer;
+                NavigateToPage(1); // Playlists
+                PlaylistsVM.LoadFromCache();
+            }
+            else
+            {
+                NavigateToPage(0);
+            }
         };
         editor.CancelRequested += () =>
         {

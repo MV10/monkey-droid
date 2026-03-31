@@ -19,7 +19,7 @@
       </Border>
       <TextBlock Text="monkey-droid" FontSize="20" FontWeight="Bold"
                  HorizontalAlignment="Center" />
-      <TextBlock Text="Version 1.0" FontSize="14"
+      <TextBlock Text="{Binding VersionText}" FontSize="14"
                  HorizontalAlignment="Center" Foreground="Gray" />
       <TextBlock Text="https://www.monkeyhihat.com/" FontSize="14"
                  HorizontalAlignment="Center" Foreground="Gray" />

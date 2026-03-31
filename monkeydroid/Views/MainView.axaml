@@ -80,9 +80,6 @@
           <DataTemplate DataType="vm:AboutViewModel">
             <views:AboutView />
           </DataTemplate>
-          <DataTemplate DataType="vm:HelpViewModel">
-            <views:HelpView />
-          </DataTemplate>
           <DataTemplate DataType="vm:ServerEditorViewModel">
             <views:ServerEditorView />
           </DataTemplate>

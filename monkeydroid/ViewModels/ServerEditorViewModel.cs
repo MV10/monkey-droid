@@ -23,6 +23,8 @@ public partial class ServerEditorViewModel : ViewModelBase
 
     public event Action? SaveRequested;
     public event Action? CancelRequested;
+    public event Action<string>? ShowMessage;
+    public bool FirstServerAdded { get; private set; }
 
     private readonly string? _originalName;
 
@@ -84,12 +86,20 @@ public partial class ServerEditorViewModel : ViewModelBase
 
         if (IsAddMode)
         {
+            var name = ServerName.Trim();
             store.Data.Servers.Add(new Server
             {
-                Name = ServerName.Trim(),
+                Name = name,
                 Port = port,
                 AlternatePort = altPort,
             });
+
+            if (store.Data.Servers.Count == 1)
+            {
+                store.Data.AutoSelectServer = name;
+                FirstServerAdded = true;
+                ShowMessage?.Invoke("This server will be auto-selected at startup.");
+            }
         }
         else
         {
