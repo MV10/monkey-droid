@@ -1,4 +1,4 @@
-# monkey-droid <img src="https://github.com/MV10/volts-laboratory/blob/master/misc/mhh-icon.png" height="32px"/>
+# monkey-droid <img src="https://github.com/MV10/monkey-droid/blob/master/docs/icon.png" height="32px"/>
 
 This is a simple remote-control UI for the [Monkey Hi Hat](https://github.com/MV10/monkey-hi-hat) music visualization app.
 

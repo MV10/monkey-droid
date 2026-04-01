@@ -6,7 +6,7 @@ using Avalonia.Android;
 namespace monkeydroid.Android;
 
 [Activity(
-    Label = "monkeydroid.Android",
+    Label = "monkeydroid",
     Theme = "@style/MyTheme.NoActionBar",
     Icon = "@drawable/icon",
     MainLauncher = true,
