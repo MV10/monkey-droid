@@ -47,7 +47,7 @@ The Hamburger Menu is available on all swipe-sequence views.
 
 ### Hamburger menu behaviors
 
-* Docs: Opens the default browser to https://www.monkeyhihat.com/docs/index.php#/using-monkey-hi-hat?id=remote-control-monkey-droid-gui
+* Docs: Opens the default browser to https://www.monkeyhihat.com/docs/index.php#/using-monkey-droid
 * Get support: Opens the default browser to https://www.monkeyhihat.com/docs/index.php#/troubleshooting
 * About: Loads the About Screen view
 * Clear auto-select server: Resets the auto-selected server name to blank (stored in the server data file)

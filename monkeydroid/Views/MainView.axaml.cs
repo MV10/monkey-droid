@@ -99,7 +99,7 @@ public partial class MainView : UserControl
                     vm.ShowNonSequenceView(new AboutViewModel());
                     break;
                 case "Docs":
-                    LaunchUri("https://www.monkeyhihat.com/docs/index.php#/using-monkey-hi-hat?id=remote-control-monkey-droid-gui");
+                    LaunchUri("https://www.monkeyhihat.com/docs/index.php#/using-monkey-droid");
                     break;
                 case "Get support":
                     LaunchUri("https://www.monkeyhihat.com/docs/index.php#/troubleshooting");
