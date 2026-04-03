@@ -20,6 +20,7 @@ public static class BackgroundListLoader
         await _semaphore.WaitAsync(ct);
         IsDownloading = true;
         IsDownloadingChanged?.Invoke(true);
+        CommsService.PushBusy();
         try
         {
             var names = await FetchFileList(server, "viz", ct);
@@ -28,7 +29,7 @@ public static class BackgroundListLoader
             foreach (var name in names)
             {
                 ct.ThrowIfCancellationRequested();
-                await Task.Delay(500, ct);
+                await Task.Delay(250, ct);
 
                 if (!await CommsService.SendCommand(server, "--md.detail", name))
                     continue;
@@ -48,6 +49,7 @@ public static class BackgroundListLoader
         }
         finally
         {
+            CommsService.PopBusy();
             IsDownloading = false;
             IsDownloadingChanged?.Invoke(false);
             _semaphore.Release();
@@ -60,6 +62,7 @@ public static class BackgroundListLoader
         await _semaphore.WaitAsync(ct);
         IsDownloading = true;
         IsDownloadingChanged?.Invoke(true);
+        CommsService.PushBusy();
         try
         {
             var names = await FetchFileList(server, "fx", ct);
@@ -68,7 +71,7 @@ public static class BackgroundListLoader
             foreach (var name in names)
             {
                 ct.ThrowIfCancellationRequested();
-                await Task.Delay(500, ct);
+                await Task.Delay(250, ct);
 
                 if (!await CommsService.SendCommand(server, "--md.detailfx", name))
                     continue;
@@ -88,6 +91,7 @@ public static class BackgroundListLoader
         }
         finally
         {
+            CommsService.PopBusy();
             IsDownloading = false;
             IsDownloadingChanged?.Invoke(false);
             _semaphore.Release();
@@ -100,6 +104,7 @@ public static class BackgroundListLoader
         await _semaphore.WaitAsync(ct);
         IsDownloading = true;
         IsDownloadingChanged?.Invoke(true);
+        CommsService.PushBusy();
         try
         {
             var names = await FetchFileList(server, "playlists", ct);
@@ -112,6 +117,7 @@ public static class BackgroundListLoader
         }
         finally
         {
+            CommsService.PopBusy();
             IsDownloading = false;
             IsDownloadingChanged?.Invoke(false);
             _semaphore.Release();

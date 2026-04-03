@@ -18,9 +18,28 @@ public partial class MainView : UserControl
     private bool _pointerPressedValid;
     private const double SwipeThreshold = 80;
 
+    private readonly Border _busyOverlay;
+
     public MainView()
     {
         InitializeComponent();
+
+        _busyOverlay = new Border
+        {
+            Background = new SolidColorBrush(Color.FromArgb(120, 0, 0, 0)),
+            IsVisible = false,
+            Child = new ProgressBar
+            {
+                IsIndeterminate = true,
+                Width = 120,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+            },
+        };
+        OverlayHost.Children.Add(_busyOverlay);
+
+        CommsService.BusyChanged += busy =>
+            Avalonia.Threading.Dispatcher.UIThread.Post(() => _busyOverlay.IsVisible = busy);
 
         AddHandler(PointerPressedEvent, OnPointerPressedTunnel, RoutingStrategies.Tunnel);
         AddHandler(PointerReleasedEvent, OnPointerReleasedTunnel, RoutingStrategies.Tunnel);
@@ -316,6 +335,19 @@ public partial class MainView : UserControl
                     Height = 1,
                     Background = new SolidColorBrush(Color.FromRgb(80, 80, 80)),
                     Margin = new Thickness(8, 4),
+                });
+                continue;
+            }
+
+            if (item.StartsWith('@'))
+            {
+                menuStack.Children.Add(new TextBlock
+                {
+                    Text = item[1..],
+                    Foreground = new SolidColorBrush(Color.FromRgb(180, 180, 180)),
+                    Padding = new Thickness(12, 8),
+                    FontSize = 15,
+                    FontWeight = FontWeight.SemiBold,
                 });
                 continue;
             }

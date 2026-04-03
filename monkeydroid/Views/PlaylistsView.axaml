@@ -31,7 +31,7 @@
     </Grid>
 
     <!-- Playlist list -->
-    <ScrollViewer>
+    <ScrollViewer Name="ListScroller">
       <ItemsControl ItemsSource="{Binding Playlists}" Margin="16,8" Name="PlaylistItems">
         <ItemsControl.ItemTemplate>
           <DataTemplate DataType="m:PlaylistInfo">

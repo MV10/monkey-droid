@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
@@ -35,20 +36,35 @@ public partial class ServerListView : UserControl
 
         var isAutoSelect = server.Name.Equals(DataStore.Instance.Data.AutoSelectServer, System.StringComparison.OrdinalIgnoreCase);
         var autoSelectLabel = isAutoSelect ? "Disable auto-select" : "Auto-select at startup";
-        var menuItems = new[] { "Select", "Test", "Edit", autoSelectLabel, "Delete", "", "Cancel" };
+        var testMain = $"Test :{server.Port}";
+        var menuItems = new System.Collections.Generic.List<string>
+            { $"@{server.Name}", "", "Use this server", testMain };
+        if (server.AlternatePort.HasValue)
+            menuItems.Add($"Test :{server.AlternatePort.Value}");
+        menuItems.AddRange(new[] { "Edit", autoSelectLabel, "Delete", "", "Cancel" });
 
-        mainView.ShowMenuOverlay(menuItems, async selected =>
+        mainView.ShowMenuOverlay(menuItems.ToArray(), async selected =>
         {
             var vm = mainView.DataContext as MainViewModel;
             switch (selected)
             {
-                case "Select":
+                case "Use this server":
                     slvm.RequestSelect(server);
                     vm?.NavigateToPlaylistsAfterSelect();
                     break;
-                case "Test":
-                    var connected = await CommsService.TryConnect(server);
-                    mainView.ShowMessageOverlay(connected ? "Success" : "Failed");
+                case var s when s == testMain:
+                    CommsService.PushBusy();
+                    var connectTask = CommandLineSwitchPipe.CommandLineSwitchServer.TryConnect(server.Name, server.Port);
+                    var connected = await Task.WhenAny(connectTask, Task.Delay(1000)) == connectTask && connectTask.Result;
+                    CommsService.PopBusy();
+                    mainView.ShowMessageOverlay($"Connection to {server.Name} port {server.Port} {(connected ? "succeeded" : "failed")}.");
+                    break;
+                case var s when s.StartsWith("Test :") && server.AlternatePort.HasValue:
+                    CommsService.PushBusy();
+                    var altTask = CommandLineSwitchPipe.CommandLineSwitchServer.TryConnect(server.Name, server.AlternatePort.Value);
+                    var altConnected = await Task.WhenAny(altTask, Task.Delay(1000)) == altTask && altTask.Result;
+                    CommsService.PopBusy();
+                    mainView.ShowMessageOverlay($"Connection to {server.Name} port {server.AlternatePort.Value} {(altConnected ? "succeeded" : "failed")}.");
                     break;
                 case "Edit":
                     vm?.ShowServerEditor(isAddMode: false, server);

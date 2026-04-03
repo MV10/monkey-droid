@@ -23,7 +23,7 @@
     </Grid>
 
     <!-- FX list -->
-    <ScrollViewer>
+    <ScrollViewer Name="ListScroller">
       <ItemsControl ItemsSource="{Binding FxList}" Margin="16,8">
         <ItemsControl.ItemTemplate>
           <DataTemplate DataType="m:FxInfo">

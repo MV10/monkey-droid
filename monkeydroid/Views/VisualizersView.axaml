@@ -27,7 +27,7 @@
     </Grid>
 
     <!-- Visualizer list -->
-    <ScrollViewer>
+    <ScrollViewer Name="ListScroller">
       <ItemsControl ItemsSource="{Binding Visualizers}" Margin="16,8">
         <ItemsControl.ItemTemplate>
           <DataTemplate DataType="m:VisualizerInfo">

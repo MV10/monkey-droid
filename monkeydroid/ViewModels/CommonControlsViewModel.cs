@@ -42,7 +42,8 @@ public partial class CommonControlsViewModel : ViewModelBase
         if (await CommsService.SendCommand(server, "--fps"))
         {
             var response = CommsService.GetResponse();
-            ShowInfoResponse?.Invoke(response);
+            if (!response.StartsWith("ERR", System.StringComparison.Ordinal))
+                ShowInfoResponse?.Invoke(response);
         }
     }
 
@@ -78,7 +79,8 @@ public partial class CommonControlsViewModel : ViewModelBase
         if (await CommsService.SendCommand(server, "--info"))
         {
             var response = CommsService.GetResponse();
-            ShowInfoResponse?.Invoke(response);
+            if (!response.StartsWith("ERR", System.StringComparison.Ordinal))
+                ShowInfoResponse?.Invoke(response);
         }
     }
 }

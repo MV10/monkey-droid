@@ -1,6 +1,8 @@
 #!/bin/bash
 
-echo "Check /data/Source/_signing_keys for versioning notes about keystore files."
+echo "Check for versioning notes about Android keystore files:"
+echo "/data/Source/_signing_keys/monkeydroid.keystore.readme.txt"
+echo ""
 
 KEYSTORE="/data/Source/_signing_keys/monkeydroid.keystore"
 KEYSTORE_ALIAS="monkeydroid"
