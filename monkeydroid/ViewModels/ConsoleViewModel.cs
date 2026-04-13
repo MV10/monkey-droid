@@ -28,12 +28,19 @@ public partial class ConsoleViewModel : ViewModelBase
         if (string.IsNullOrEmpty(input)) return;
 
         AddToHistory(input);
-        AddOutputLine($"> {input}");
-        InputText = "";
 
         var parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         if (parts.Length > 0 && !parts[0].StartsWith("--"))
             parts[0] = "--" + parts[0];
+
+        var displayText = string.Join(' ', parts);
+        AddOutputLine($"> {displayText}");
+        InputText = "";
+
+        if (string.Equals(parts[0], "--cls", StringComparison.OrdinalIgnoreCase))
+        {
+            OutputLines.Clear();
+        }
 
         var server = DataStore.Instance.GetSelectedServer();
         if (server is null)

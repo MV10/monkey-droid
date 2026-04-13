@@ -3,6 +3,7 @@
   <component name="AvaloniaProject">
     <option name="projectPerEditor">
       <map>
+        <entry key="monkeydroid/Views/AboutView.axaml" value="monkeydroid.Desktop/monkeydroid.Desktop.csproj" />
         <entry key="monkeydroid/Views/MainView.axaml" value="monkeydroid.Desktop/monkeydroid.Desktop.csproj" />
       </map>
     </option>
