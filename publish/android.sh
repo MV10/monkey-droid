@@ -19,9 +19,12 @@ if [ ! -f "$KEYSTORE" ]; then
   echo ""
 fi
 
-# Prompt for the keystore password
-read -sp "Keystore password: " KSPASS
-echo ""
+if [ -z "$1" ]; then
+  echo "ERROR: Keystore password required as first argument."
+  echo "Usage: $0 <keystore-password>"
+  exit 1
+fi
+KSPASS="$1"
 
 # Validate the password before building
 if ! keytool -list -keystore "$KEYSTORE" -storepass "$KSPASS" > /dev/null 2>&1; then

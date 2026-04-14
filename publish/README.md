@@ -5,3 +5,5 @@ The script will show you the publish target output upon completion.
 
 The Monkey Hi Hat publish.sh script will copy these to staging.
 Or run copy-to-home.sh to put them in your home directory for testing etc.
+
+The `android.sh` script requires a keystore password argument.
