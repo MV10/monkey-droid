@@ -4,7 +4,7 @@ This is a simple remote-control UI for the [Monkey Hi Hat](https://github.com/MV
 
 Download it from the Monkey Hi Hat [releases](https://github.com/MV10/monkey-hi-hat/releases) page.
 
-Version 2 was a complete from-scratch rewrite. It supports Android, Windows, and Linux. (I do not support or use iOS / OSX. It's possible to build a version for that but I don't have an Apple machine to do the build, so it's unlikely to happen. If you're a .NET dev and want to tackle it _and_ own that build and any related code, I'll consider it. Open an Issue to discuss.)
+Version 2 was a complete from-scratch rewrite. It supports Android, Windows, and Linux. (I will never support iOS, not even if another dev offers to own that aspect.)
 
 Note that this communicates with Monkey Hi Hat over the local network, so you must set the `UnsecuredPort` option in the Monkey Hi Hat `mhh.conf` configuration file to tell it to listen for commands via TCP (this is enabled and configured by default).
 
